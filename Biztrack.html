@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>General Store Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <h2>🛒 Biz Track General Store Shop Management</h2>
+</header>
+
+<div class="dashboard-actions">
+  <button onclick="showSection('dashboard')">Dashboard</button>
+  <button onclick="showSection('purchase')">Purchase Management</button>
+  <button onclick="showSection('billing')">Customer Billing</button>
+  <button onclick="showSection('stock')">Stock Management</button>
+  <button onclick="showSection('report')">Profit & Loss</button>
+</div>
+
+<!-- DASHBOARD SECTION -->
+<section id="dashboard" class="section">
+  <h2>Dashboard</h2>
+
+  <div class="dashboard-cards">
+
+    <div class="dash-card">
+      <h4>Today's Sales</h4>
+      <p>₹ <span id="todaySales">0</span></p>
+    </div>
+
+    <div class="dash-card profit">
+      <h4>Net Profit / Loss</h4>
+      <p>₹ <span id="todayProfit">0</span></p>
+    </div>
+
+    <div class="dash-card warning">
+      <h4>Low Stock Items</h4>
+      <p><span id="lowStockCount">0</span></p>
+    </div>
+
+    <div class="dash-card">
+      <h4>Total Products</h4>
+      <p><span id="totalProductsCount">0</span></p>
+    </div>
+
+    <div class="dash-card-danger">
+      <h4>Out of stock</h4>
+      <p><span id="outOfStockCount">0</span></p>
+    </div>
+</div>
+
+<!-- Recent Transactions -->
+<div class="dashboard-card">
+  <h3>Recent Transactions</h3>
+
+  <table id="recentTransactionsTable">
+    <thead>
+      <tr>
+        <th>Bill ID</th>
+        <th>Date & Time</th>
+        <th>Amount (₹)</th>
+        <th>Payment Mode</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- JS will insert rows -->
+    </tbody>
+  </table>
+</div>
+</section>
+
+
+<!-- PURCHASE -->
+<section id="purchase" class="section">
+  <h3>Add New Purchase</h3>
+
+  <form id="purchaseForm">
+    <label>Purchase Date *</label>
+    <input type="date" id="purchaseDate" required>
+
+    <label>Purchase ID *</label>
+    <input type="text" id="purchaseId" placeholder="PUR-001" required>
+
+    <label>Product Name *</label>
+    <input type="text" id="productName" placeholder="Rice 1kg" required>
+
+    <label>Purchase Quantity *</label>
+    <input type="number" id="purchaseQty" required>
+
+    <label>Purchase Rate (₹ per unit) *</label>
+    <input type="number" id="purchaseRate" required>
+
+    <label>Selling Price (₹ per unit) *</label>
+    <input type="number" id="sellingPrice" required>
+
+    <button type="submit">Add Purchase & Update Stock</button>
+  </form>
+
+  <div class="filter-box">
+  <label>Start Date:</label>
+  <input type="date" id="filterFromDate">
+
+  <label>End Date:</label>
+  <input type="date" id="filterToDate">
+
+  <button onclick="filterPurchases()">Filter</button>
+  <button onclick="clearPurchaseFilter()">Clear</button>
+</div>
+
+  <h4>Purchase History</h4>
+  <input 
+  type="text" 
+  id="searchPurchase" 
+  placeholder=""
+  onkeyup="searchPurchase()">
+  <table id="purchaseTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Purchase ID</th>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Rate</th>
+        <th>Selling Price</th>
+        <th>Total Cost</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<section id="billing" class="section" style="display:none;">
+  <h3>Customer Billing</h3>
+
+  <div class="billing-header">
+    <label>Customer Name</label>
+    <input type="text" id="custName">
+
+    <label>Phone Number</label>
+    <input type="text" id="custPhone">
+  <table id="billingTable">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Price (₹)</th>
+      <th>Total (₹)</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<datalist id="productList"></datalist>
+
+<button onclick="addBillingRow()">Add Product</button>
+<p><strong>Final Total: ₹ <span id="finalTotal">0</span></strong></p>
+
+<!-- PASTE PAYMENT MODE HERE -->
+<div class="payment-mode">
+  <label><strong>Payment Mode:</strong></label><br>
+
+  <label>
+    <input type="radio" name="paymentMode" value="Cash" checked>
+    Cash
+  </label>
+
+  <label>
+    <input type="radio" name="paymentMode" value="UPI">
+    UPI
+  </label>
+
+  <label>
+    <input type="radio" name="paymentMode" value="Online">
+    Online
+  </label>
+</div>
+
+<!-- THEN THIS BUTTON -->
+<button onclick="generateBill()">Generate Bill</button>
+<!-- BILL DETAILS / RECEIPT -->
+<section id="billDetailsSection" class="section" style="display:none;">
+  <div class="bill-container">
+
+    <div class="bill-header">
+      <h2>🛒 BizTrack – General Store</h2>
+      <p>Digital Billing Receipt</p>
+    </div>
+
+    <div class="bill-info">
+      <div>
+        <p><strong>Bill No:</strong> <span id="billNo"></span></p>
+        <p><strong>Date:</strong> <span id="billDate"></span></p>
+      </div>
+      <div>
+        <p><strong>Customer:</strong> <span id="billCustomer"></span></p>
+      </div>
+    </div>
+
+    <table class="bill-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Price (₹)</th>
+          <th>Total (₹)</th>
+        </tr>
+      </thead>
+      <tbody id="billItems"></tbody>
+    </table>
+
+    <div class="bill-summary">
+      <h3>Total Amount: ₹ <span id="billFinalTotal">0</span></h3>
+    </div>
+
+    <div class="bill-actions">
+      <button onclick="printBill()">🖨 Print Bill</button>
+      <button onclick="closeBill()">Close</button>
+    </div>
+
+  </div>
+</section>
+</section>
+
+<!-- STOCK MANAGEMENT -->
+<section id="stock" class="section" style="display:none;">
+  <h3>Stock Management</h3>
+  <label>Start Date:</label>
+<input type="date" id="stockFromDate">
+
+<label>End Date:</label>
+<input type="date" id="stockToDate">
+
+<button onclick="calculateFastSlow()">Fast Moving</button>
+<button onclick="calculateFastSlow()">Slow Moving</button>
+<button onclick="clearStockFilter()">Clear</button>
+
+  <!-- Filters -->
+  <div class="stock-filters">
+    <input
+      type="text"
+      id="stockSearch"
+      placeholder="Search product..."
+      onkeyup="filterStockTable()"
+    />
+
+    <select id="stockFilter" onchange="applyStockFilter()">
+      <option value="all">All Products</option>
+      <option value="low">Low Stock</option>
+      <option value="out">Out of Stock</option>
+      <option value="fast">Fast Moving</option>
+      <option value="slow">Slow Moving</option>
+    </select>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="stock-cards">
+    <div>Total Products<br><strong><span id="totalProducts">0</span></strong></div>
+    <div>Total Purchased<br><strong><span id="totalPurchased">0</span></strong></div>
+    <div>Total Sold<br><strong><span id="totalSold">0</span></strong></div>
+    <div>Current Stock<br><strong><span id="currentStock">0</span></strong></div>
+  </div>
+
+  <!-- Stock Table -->
+  <table id="stockTable">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Purchased</th>
+        <th>Sold</th>
+        <th>Current Stock</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<!-- REPORT -->
+<section id="report" class="section">
+
+  <div class="report-card">
+
+    <!-- Filters -->
+    <div class="report-filters">
+      <div>
+        <label>Start Date</label>
+        <input type="date" id="startDate">
+      </div>
+
+      <div>
+        <label>End Date</label>
+        <input type="date" id="endDate">
+      </div>
+
+      <button class="primary" onclick="generateReport()">Generate Report</button>
+    </div>
+
+    <!-- Meta -->
+    <div class="report-details">
+      <p><strong>Report ID:</strong> <span id="reportId">-</span></p>
+      <p><strong>Generated On:</strong> <span id="reportTime">-</span></p>
+    </div>
+
+    <!-- Summary boxes -->
+    <div class="summary-report">
+      <div class="summary-box">
+        <h4>Total Purchase</h4>
+        <p>₹ <span id="reportPurchase">0</span></p>
+      </div>
+
+      <div class="summary-box">
+        <h4>Total Sales</h4>
+        <p>₹ <span id="reportSales">0</span></p>
+      </div>
+
+      <div class="summary-box profit">
+        <h4>Net Profit / Loss</h4>
+        <p>₹ <span id="reportProfit">0</span></p>
+      </div>
+      <!-- Extra Profit Insights -->
+<div class="summary-box">
+  <h4>Gross Profit</h4>
+  <p>₹ <span id="grossProfit">0</span></p>
+</div>
+
+<div class="summary-box">
+  <h4>Profit Margin</h4>
+  <p><span id="profitMargin">0</span> %</p>
+</div>
+
+<!-- Period Comparison -->
+<div class="report-detailss">
+  <p><strong>Previous Period Profit:</strong> ₹ <span id="prevProfit">0</span></p>
+  <p><strong>Current Period Profit:</strong> ₹ <span id="currentProfit">0</span></p>
+  <p><strong>Change:</strong> ₹ <span id="profitChange">0</span></p>
+</div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-box">
+      <canvas id="profitChart"></canvas>
+    </div>
+
+  </div>
+</section>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Your main JS file -->
+<script src="js/bizrack.js"></script>
+</body>
+</html>
+
+
