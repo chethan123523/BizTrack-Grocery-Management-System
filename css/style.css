@@ -305,21 +305,21 @@ table tr:hover {
 ================================ */
 
 #report {
-  padding: 25px;
+  padding: 26px;
   background: #f4f7fb;
 }
 
 .report-card {
   background: #ffffff;
   padding: 25px;
-  border-radius: 10px;
+  border-radius: 11px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* ---------- Filters ---------- */
 .report-filters {
   display: flex;
-  gap: 20px;
+  gap: 19px;
   align-items: flex-end;
   flex-wrap: wrap;
   margin-bottom: 20px;
@@ -345,8 +345,8 @@ table tr:hover {
   background: #2563eb;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  font-weight: 600;
+  border-radius: 6.1px;
+  font-weight: 601;
   cursor: pointer;
 }
 
@@ -357,7 +357,7 @@ table tr:hover {
 /* ---------- Report Meta ---------- */
 .report-details {
   margin: 15px 0;
-  font-size: 14px;
+  font-size: 14.1px;
   color: #444;
 }
 
@@ -404,7 +404,7 @@ table tr:hover {
 
 /* ---------- Chart ---------- */
 .chart-box {
-  margin-top: 30px;
+  margin-top: 29px;
   padding: 20px;
   background: #f9fafb;
   border-radius: 8px;
