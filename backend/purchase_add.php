@@ -145,7 +145,7 @@ if ($productResult->num_rows > 0) {
 
 } else {
 
-    // 👉 INSERT NEW PRODUCT
+    //  INSERT NEW PRODUCT
     $insertProduct = $conn->prepare("
         INSERT INTO products 
         (product_name, selling_price, total_purchased, total_sold, current_stock, min_stock, created_at)
@@ -156,10 +156,10 @@ if ($productResult->num_rows > 0) {
     $insertProduct->execute();
 }
 
-/* ---------------- UPDATE STOCK ---------------- */
+/* ---------------- UPDATE STOCKS ---------------- */
 $checkStat = $conn->prepare("
     SELECT total_purchased, current_stock 
-    FROM stock 
+    FROM stock
     WHERE product_name = ?
 ");
 $checkStat->bind_param("s", $name);

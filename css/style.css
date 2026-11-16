@@ -407,7 +407,7 @@ table tr:hover {
   margin-top: 29px;
   padding: 20px;
   background: #f9fafb;
-  border-radius: 8px;
+  border-radius: 7px;
 }
 
 .chart-box canvas {
