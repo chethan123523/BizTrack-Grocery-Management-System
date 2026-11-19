@@ -180,7 +180,7 @@ if ($result->num_rows > 0) {
             current_stock = ?,
             purchase_rate = ?,
             selling_price = ?,
-            expiry_date = ?,        -- ✅ FIXED
+            expiry_date = ?,   
             updated_at = NOW()
         WHERE product_name = ?
     ");
@@ -191,7 +191,7 @@ if ($result->num_rows > 0) {
         $newStock,
         $rate,
         $sell,
-        $expiry,   // ✅ FIXED
+        $expiry,   
         $name
     );
 
