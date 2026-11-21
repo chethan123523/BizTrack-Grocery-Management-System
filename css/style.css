@@ -28,11 +28,11 @@ body {
 .dash-card,
 .dash-card-danger {
   background: #fff;
-  padding: 18px;
+  padding: 19px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 13px rgba(0,0,0,0.08);
   text-align: center;
-  font-weight: 600;
+  font-weight: 601;
 }
 
 /* Titles */
